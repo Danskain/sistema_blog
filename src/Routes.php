@@ -3,30 +3,34 @@
 use App\Controllers\AuthController;
 use App\Controllers\PostController;
 use App\Middleware\AuthMiddleware;
+use App\Helpers\RequestHandler;
 
 $authController = new AuthController();
 $postController = new PostController();
 
-//echo json_encode(['token' => $_SERVER['REQUEST_URI']]);
+// Obtener la URI limpia
+$cleanUri = RequestHandler::getCleanUri();
+$requestMethod = RequestHandler::getRequestMethod();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SERVER['REQUEST_URI'] === '/PHP/Blog_Sistema/public/index.php/api/register') {
-  //echo json_encode(['token' => $_POST]);
-  $input = file_get_contents('php://input');
-  $data = json_decode($input, true);
+// Ruta para registro de usuario
+if ($requestMethod === 'POST' && $cleanUri === '/api/register') {
+  $data = RequestHandler::getPostData();
   echo $authController->register($data);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SERVER['REQUEST_URI'] === '/PHP/Blog_Sistema/public/index.php/api/login') {
-  $input = file_get_contents('php://input');
-  $data = json_decode($input, true);
+// Ruta para login de usuario
+if ($requestMethod === 'POST' && $cleanUri === '/api/login') {
+  $data = RequestHandler::getPostData();
   echo $authController->login($data);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_SERVER['REQUEST_URI'] === '/api/posts') {
-  $user = AuthMiddleware::handle($_POST);
-  echo $postController->createPost($_POST);
+// Ruta para crear un nuevo post
+if ($requestMethod === 'POST' && $cleanUri === '/api/posts') {
+  $user = AuthMiddleware::handle(RequestHandler::getPostData());
+  echo $postController->createPost(RequestHandler::getPostData());
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && preg_match('/\/api\/posts\/(\d+)/', $_SERVER['REQUEST_URI'], $matches)) {
+// Ruta para listar posts por categoría
+if ($requestMethod === 'GET' && preg_match('/\/api\/posts\/(\d+)/', $cleanUri, $matches)) {
   echo $postController->listPostsByCategory($matches[1]);
 }
