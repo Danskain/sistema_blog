@@ -36,16 +36,16 @@ class AuthController
       // Intentar registrar el usuario
       $result = $this->authService->register($name, $email, $password);
 
-      if ($result) {
-        // Respuesta exitosa
-        ResponseHandler::sendSuccess('Usuario registrado correctamente', 201, [
-          'name' => $name,
-          'email' => $email
-        ]);
-      } else {
-        // Respuesta de error en caso de que el registro falle
-        ResponseHandler::sendError('Error al registrar usuario', 500);
+      // Verificar si se encontró un error
+      if (is_array($result) && isset($result['error']) && $result['error']) {
+        ResponseHandler::sendError($result['message'], $result['status']);
       }
+
+      // Respuesta exitosa
+      ResponseHandler::sendSuccess('Usuario registrado correctamente', 201, [
+        'name' => $name,
+        'email' => $email
+      ]);
     } else {
       // Respuesta de error si faltan campos requeridos
       ResponseHandler::sendError('Faltan datos requeridos', 400);

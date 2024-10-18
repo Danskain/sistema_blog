@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Database;
 use PDO;
+use PDOException;
 
 class User
 {
@@ -22,12 +23,27 @@ class User
       $stmt->bindParam(':name', $name);
       $stmt->bindParam(':email', $email);
       $stmt->bindParam(':password', $password);
-      return $stmt->execute();
-      //code...
-    } catch (\Throwable $th) {
-      http_response_code(500);
-      return $th;
-      //throw $th;
+      $stmt->execute();
+
+      // Devolver true si el registro fue exitoso
+      return true;
+    } catch (PDOException $e) {
+      // Verificar si es un error de duplicado (viola la restricción UNIQUE)
+      if ($e->getCode() === '23000') {
+        // Retornar un mensaje indicando que el correo ya existe
+        return [
+          'error' => true,
+          'message' => 'El correo ya esta registrado.',
+          'status' => 409 // Código HTTP 409 para conflicto
+        ];
+      }
+
+      // Enviar cualquier otro error de base de datos
+      return [
+        'error' => true,
+        'message' => 'Error al registrar el usuario.',
+        'status' => 500 // Código HTTP 500 para error interno
+      ];
     }
   }
 
