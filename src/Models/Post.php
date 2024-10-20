@@ -16,6 +16,12 @@ class Post
 
   public function createPost($title, $content, $userId, $categoryId)
   {
+    /* $response = [
+      'userId' => $userId,
+      'categoryId' => $categoryId,
+    ];
+    return json_encode($categoryId); */
+
     $sql = "INSERT INTO posts (title, content, userid, categoryid) VALUES (:title, :content, :userId, :categoryId)";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':title', $title);

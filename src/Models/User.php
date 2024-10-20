@@ -33,7 +33,7 @@ class User
         // Retornar un mensaje indicando que el correo ya existe
         return [
           'error' => true,
-          'message' => 'El correo ya esta registrado.',
+          'message' => ["infoMessage" => 'El correo ya esta registrado.', "errorInfo" =>$e->errorInfo],
           'status' => 409 // Código HTTP 409 para conflicto
         ];
       }
@@ -41,7 +41,7 @@ class User
       // Enviar cualquier otro error de base de datos
       return [
         'error' => true,
-        'message' => 'Error al registrar el usuario.',
+        'message' => ["infoMessage" => 'Error al registrar el usuario.', $e],
         'status' => 500 // Código HTTP 500 para error interno
       ];
     }

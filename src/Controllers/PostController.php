@@ -16,13 +16,14 @@ class PostController
 
   public function createPost($data)
   {
-    if (isset($data['title']) && isset($data['content']) && isset($data['categoryid'])) {
+
+    if (isset($data['title']) && isset($data['content']) && isset($data['categoryId'])) {
       $title = $data['title'];
       $content = $data['content'];
-      $categoryId = $data['categoryid'];
-      $userId = $data['userid'];  // Asumiendo que el userId ya viene desde el middleware
+      $categoryId = (int) $data['categoryId'];
+      $userId = (int) $data['userid'];  // Asumiendo que el userId ya viene desde el middleware
 
-      $post = $this->postService->createPost($title, $content, $categoryId, $userId);
+      $post = $this->postService->createPost($title, $content, $userId, $categoryId);
 
       if ($post) {
         ResponseHandler::sendSuccess('Post creado exitosamente', 201, $post);

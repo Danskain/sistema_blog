@@ -25,6 +25,7 @@ class AuthService
     $user = $this->userModel->findUserByEmail($email);
 
     if ($user && password_verify($password, $user['password'])) {
+      // Generar token JWT usando los datos del usuario
       return JWT::createJWT($user['id'], $user['email']);
     }
 

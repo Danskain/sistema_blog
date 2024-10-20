@@ -7,6 +7,9 @@ class ResponseHandler
   // Método para enviar una respuesta con datos y código de estado HTTP
   public static function sendResponse($data = null, $message = 'Success', $statusCode = 200)
   {
+    // Asegurar que el contenido es JSON
+    header('Content-Type: application/json');
+
     // Configurar el código de estado HTTP
     http_response_code($statusCode);
 
@@ -16,10 +19,8 @@ class ResponseHandler
       'message' => $message,
     ];
 
-    // Agregar datos solo si existen
-    if (!empty($data)) {
-      $response['data'] = $data;
-    }
+    // Agregar datos solo si existen, de lo contrario poner null
+    $response['data'] = $data ?? null;
 
     // Enviar respuesta como JSON
     echo json_encode($response);

@@ -25,9 +25,16 @@ if ($requestMethod === 'POST' && $cleanUri === '/api/login') {
 }
 
 // Ruta para crear un nuevo post
-if ($requestMethod === 'POST' && $cleanUri === '/api/posts') {
-  $user = AuthMiddleware::handle(RequestHandler::getPostData());
-  echo $postController->createPost(RequestHandler::getPostData());
+if ($requestMethod === 'POST' && $cleanUri === '/api/post') {
+  $user = AuthMiddleware::handle();
+
+  // Obtener los datos del post desde la solicitud
+  $postData = RequestHandler::getPostData();
+
+  // Agregar el userId al arreglo de datos del post
+  $postData['userid'] = $user->sub;
+
+  echo $postController->createPost($postData);
 }
 
 // Ruta para listar posts por categoría

@@ -54,15 +54,26 @@ class AuthController
 
   public function login($request)
   {
-    $email = $request['email'];
-    $password = $request['password'];
+    // Verificar que los campos requeridos están presentes
+    if (isset($request['email']) && isset($request['password'])) {
+      $email = $request['email'];
+      $password = $request['password'];
 
-    $token = $this->authService->login($email, $password);
+      // Intentar iniciar sesión a través del servicio de autenticación
+      $token = $this->authService->login($email, $password);
 
-    if ($token) {
-      return json_encode(['token' => $token]);
+      // Si se genera un token, devolver una respuesta exitosa
+      if ($token) {
+        ResponseHandler::sendSuccess('Inicio de sesión exitoso', 200, [
+          'token' => $token
+        ]);
+      } else {
+        // Responder con un error si las credenciales no son válidas
+        ResponseHandler::sendError('Credenciales inválidas', 401);
+      }
+    } else {
+      // Responder con un error si faltan campos requeridos
+      ResponseHandler::sendError('Faltan datos requeridos', 400);
     }
-
-    return json_encode(['error' => 'Invalid credentials']);
   }
 }
