@@ -22,7 +22,7 @@ class RequestHandler
   public static function getCleanUri()
   {
     // Quitar el prefijo que incluye /index.php para obtener solo la URI
-    $requestUri = str_replace('/PHP/Blog_Sistema/index.php', '', $_SERVER['REQUEST_URI']);
+    $requestUri = str_replace($_ENV['URL_LOCALHOST'], '', $_SERVER['REQUEST_URI']);
     return $requestUri;
   }
 
