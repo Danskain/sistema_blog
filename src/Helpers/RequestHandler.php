@@ -21,8 +21,8 @@ class RequestHandler
   // Método para obtener una URI limpia sin partes innecesarias
   public static function getCleanUri()
   {
-    // Quitar el prefijo que incluye /public/index.php para obtener solo la URI
-    $requestUri = str_replace('/PHP/Blog_Sistema/public/index.php', '', $_SERVER['REQUEST_URI']);
+    // Quitar el prefijo que incluye /index.php para obtener solo la URI
+    $requestUri = str_replace('/PHP/Blog_Sistema/index.php', '', $_SERVER['REQUEST_URI']);
     return $requestUri;
   }
 

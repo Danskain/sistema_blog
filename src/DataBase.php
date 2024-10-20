@@ -17,10 +17,11 @@ class Database
 
   public function __construct()
   {
-    $this->host = "localhost";
-    $this->db = "blog";
-    $this->user = "root";
-    $this->pass = "";
+
+    $this->host = $_ENV['DB_HOST'];
+    $this->db = $_ENV['DB_NAME'];
+    $this->user = $_ENV['DB_USER'];
+    $this->pass = $_ENV['DB_PASS'];
 
     $dsn = "mysql:host=$this->host;dbname=$this->db;charset=$this->charset";
 
