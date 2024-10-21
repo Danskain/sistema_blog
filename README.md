@@ -1,95 +1,98 @@
-Blog Sistema - Instalación y Configuración
+# Blog Sistema - Instalación y Configuración
 
 Este es un sistema básico de gestión de un blog que utiliza PHP con una arquitectura MVC simple, MySQL como base de datos, y la biblioteca vlucas/phpdotenv para manejar variables de entorno y la biblioteca firebase/php-jwt para la seguridad.
 
-Requisitos Previos
+# Requisitos Previos
+
 Antes de comenzar, asegúrate de tener instalados los siguientes componentes:
 
-PHP 7.4+
-Composer (para manejar dependencias de PHP)
-XAMPP o WAMP (para el servidor local y MySQL)
-MySQL (para la base de datos)
-Pasos de Instalación
+`PHP 7.4+`
+`Composer (para manejar dependencias de PHP)`
+`XAMPP o WAMP (para el servidor local y MySQL)`
+`MySQL (para la base de datos)`
 
-1. Clonar el Repositorio
-   Clona este repositorio en tu servidor local (por ejemplo, en la carpeta htdocs de XAMPP):
+# Pasos de Instalación
+
+1. Clona este repositorio en tu servidor local (por ejemplo, en la carpeta htdocs de XAMPP):
 
 bash
 Copiar código
-**git clone https://github.com/tu_usuario/blog_sistema.git**
+**git clone** (https://github.com/tu_usuario/blog_sistema.git)
 
-2. Instalar Dependencias
-   Navega a la carpeta del proyecto y ejecuta el siguiente comando para instalar las dependencias usando Composer:
+2. Instalar Dependencias Navega a la carpeta del proyecto y ejecuta el siguiente comando para instalar las dependencias usando Composer:
 
 bash
 Copiar código
 cd blog_sistema
 **composer install**
 
-3. Configurar el Archivo .env
-   Crea un archivo .env en la raíz del proyecto (en la misma carpeta que composer.json). Este archivo almacenará las variables de entorno necesarias para conectar con tu base de datos y el codigo de sejuridad JWT. Utiliza el siguiente formato:
+3. Configurar el Archivo .`env` Crea un archivo .env en la raíz del proyecto (en la misma carpeta que composer.json). Este archivo almacenará las variables de entorno necesarias para conectar con tu base de datos y el codigo de sejuridad JWT. Utiliza el siguiente formato:
 
 bash
-Copiar código
-**DB_HOST=localhost**
-**DB_NAME=nombre_de_tu_base_de_datos**
-**DB_USER=root**
-**DB_PASS=tu_contraseña**
-**SECRETKEY="WWWW.DANSKAIN.COM"**
-**URL_LOCALHOST="/PHP/Blog_Sistema/index.php"**
+_Copiar código_
+`DB_HOST=localhost`
+`DB_NAME=nombre_de_tu_base_de_datos`
+`DB_USER=root`
+`DB_PASS=tu_contraseña`
+`SECRETKEY="WWWW.DANSKAIN.COM"`
+`URL_LOCALHOST="/PHP/Blog_Sistema/index.php"`
+
 Asegúrate de reemplazar los valores con los de tu configuración local de MySQL.
 
-4. Crear la Base de Datos
-   Crea una base de datos MySQL con el nombre que especificaste en el archivo .env. Luego, ejecuta las migraciones SQL necesarias para crear las tablas del sistema:
+4. Crea una base de datos MySQL con el nombre que especificaste en el archivo .env. Luego ejecuta las migraciones SQL necesarias para crear las tablas del sistema:
 
 sql
 Copiar código
-CREATE DATABASE nombre_de_tu_base_de_datos;
-USE nombre_de_tu_base_de_datos;
+`CREATE DATABASE nombre_de_tu_base_de_datos;`
 
--- Añade aquí las consultas SQL para crear tus tablas, por ejemplo:
+`USE nombre_de_tu_base_de_datos;`
 
-- Crear la base de datos 'blog' --
-  CREATE DATABASE IF NOT EXISTS blog;
+# Script de creación de la base de datos 'blog'
+
+Este script crea la base de datos **blog** con las tablas `categories`, `users` y `posts`, incluyendo las relaciones de claves foráneas.
+
+```sql
+-- Crear la base de datos 'blog'
+CREATE DATABASE IF NOT EXISTS blog;
 
 -- Usar la base de datos 'blog'
 USE blog;
 
--- Crear la tabla 'categories' --
+-- Crear la tabla 'categories'
 CREATE TABLE IF NOT EXISTS categories (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100) NOT NULL
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL
 );
 
--- Crear la tabla 'users' --
+-- Crear la tabla 'users'
 CREATE TABLE IF NOT EXISTS users (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
-name VARCHAR(100) NOT NULL,
-email VARCHAR(100) NOT NULL UNIQUE,
-password VARCHAR(255) NOT NULL,
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Crear la tabla 'posts' --
+-- Crear la tabla 'posts'
 CREATE TABLE IF NOT EXISTS posts (
-id INT(11) AUTO_INCREMENT PRIMARY KEY,
-title VARCHAR(255) NOT NULL,
-content TEXT NOT NULL,
-userid INT(11) NOT NULL,
-categoryid INT(11),
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE,
-FOREIGN KEY (categoryid) REFERENCES categories(id) ON DELETE SET NULL
+  id INT(11) AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  userid INT(11) NOT NULL,
+  categoryid INT(11),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (categoryid) REFERENCES categories(id) ON DELETE SET NULL
 );
 
-5. Configurar el Servidor Local
-   Coloca el proyecto dentro de la carpeta htdocs (o equivalente para tu servidor local). Asegúrate de que Apache esté corriendo en XAMPP o WAMP.
+5. `Configurar el Servidor Local` Coloca el proyecto dentro de la carpeta htdocs (o equivalente para tu servidor local). Asegúrate de que Apache esté corriendo en XAMPP o WAMP.
 
-6. Verificar el Archivo index.php
-   Tu archivo index.php debe estar en la raiz del proyecto :
+6. Verificar el Archivo index.php Tu archivo index.php debe estar en la raiz del proyecto :
 
 php
 **Copiar código**
+
+# Ejemplo de configuración de CORS en PHP para una API con Angular
 
 <?php
 
@@ -165,3 +168,4 @@ Si deseas contribuir a este proyecto, por favor crea un Pull Request o abre un I
 
 Licencia
 Este proyecto está bajo la licencia MIT.
+```
